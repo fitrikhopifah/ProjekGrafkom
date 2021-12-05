@@ -1,56 +1,125 @@
 #import library
+import OpenGL.GLUT as glut
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 
 # LOGIK
+
 # Koordinat x dan y untuk posisi kotak
 x_player1 = 120
 y_player1 = 130
 # hold_player = [[x_player1,y_player1]]
 
-y = 0
-kecepatan = 10
+waktu = 1000
 
+level = 1
+cek_skor = 1
+skor = 0
 hold_grid = []
-hold_grid2 = []
+# finish = [[344,50],[600,146],[600,162]]
+finish = []
+finis = False
+point = []
+cek_point = False
 
 # Labirin
 level1 = [
-    "WWWWWWWWWWWWWWWWWWWWWW",
-    "W                    W",
-    "W           WWWWWW   W",
-    "W     WWWW       W   W",
-    "W     W        WWWW  W",
-    "W  WWWW  WWWW        W",
-    "W     W     W   W    W",
-    "W     W     W  WWWW  W",
-    "W     WWW  WW  W  W  W",
-    "W       W   W  W  W  W",
-    "WWWWW   W   WWWW  W  W",
-    "W   W      WW        W",
-    "W   W   WWWW   WWW   W",
-    "W       W    E   W   W",
-    "WWWWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWWWWW",
+    "W                     W",
+    "W            WWWWWW   W",
+    "W  W   WWWW       W   W",
+    "W  W   W        WWWW  W",
+    "W  WWWWW  WWWW        W",
+    "W   W  W     W   W    W",
+    "W   W  W     W  WWWW  W",
+    "W   W  WWW  WW  W  W  W",
+    "S        W   W  W  W  W",
+    "WWWWWW   W   WWWW  W  W",
+    "W    W   W R W        W",
+    "W    W   WWWWW  WWW   W",
+    "W        W        W   W",
+    "WWWWWWWWWWWWWWFFWWWWWWW"
 ]
 
-level = [
-  "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-  "W     W        W        W  W  W",
-  "W  W  W  WWWW  WWWWWWW  W  W  W",
-  "W  W  W     W        W  W     W",
-  "W  WWWWWWWWWW  W  WWWW  W  W  W",
-  "W              W        W  W  W",
-  "W  WW  WWWWWWWWW  WWWWWWW  W  W",
-  "W  W   W       W  W        W  W",
-  "W  WWWWW   W   W  W  WWWW  W  F",
-  "S          W   W  W  W  W  WWWW",
-  "WWWWW  W   W   W  W  W  W  W  W",
-  "W      W   W   W     W  W  W  W",
-  "W  WWWWWWWWW   WWWWWWW  W  W  W",
-  "W          W            W     W",
-  "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+level2 = [
+    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W     W        W        W  W  W",
+    "W  W  W  WWWW  WWWWWWW  W  W  W",
+    "W  W  W     W        W  W     W",
+    "W  WWWWWWWWWW  W  WWWW  W  W  W",
+    "W              W        W  W  W",
+    "W  WW  WWWWWWWWW  WWWWWWW  W  W",
+    "W  W   W       W  W        W  W",
+    "W  WWWWW   W   W  W  WWWWWWW  F",
+    "S          W   W  W  W  W  WWWW",
+    "WWWWW  W   W   W  W  W  W  W  W",
+    "W      W   W   W     W  W  W  W",
+    "W  WWWWWWWWW   WWWWWWW  W  W  W",
+    "W          W               R  W",
+    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
 ]
+
+level3= [
+    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W              W     W  W     W",
+    "WWWWWWW  WWWW  W  WWWW  W  W  W",
+    "W     W     W           W  W  W",
+    "WWWW  W  WWWWWWW  WWWWWWWWWW  W",
+    "W        W  W  W     W        W",
+    "WWWWWWW  W  W  W  W  WWWW  W  W",
+    "W  W  W  W  W  W  W     W  W  W",
+    "W  W     W  W  W  WWWW  W  WWWW",
+    "W  W  W  W     W  W  W     W  W",
+    "W  W  W  WWWW  WWWW  WWWW  W  W",
+    "W  W  W           W           W",
+    "W  WWWWWWW  W  WWWWWWWWWWWWW  W",
+    "W     W     W  W R W W  W  W  F",
+    "W  WWWWWWW  WWWW   W W  W  WWWW",
+    "S  W  W  W     W              W",
+    "W  W  W  W  WWWWWWWWWWWWWWWW  W",
+    "W                    W        W",
+    "WWWWWWW  W  W  WWWW  WWWWWWW  W",
+    "W        W  W  W              W",
+    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+]
+
+lvl = [level1,level2,level3]
+
+def drawText(ch,xpos,ypos):
+    color = (69, 185, 6)
+    # color = (0, 0, 0)
+    font_style = glut.GLUT_BITMAP_8_BY_13
+    glColor3ub(color[0],color[1],color[2])
+    line=0
+    glRasterPos2f (xpos, ypos)
+    for i in ch:
+       if  i=='\n':
+          line=line+1
+          glRasterPos2f (xpos, ypos*line)
+       else:
+          glutBitmapCharacter(font_style, ord(i))  
+
+def drawTextNum(skor,xpos,ypos):
+    color = (69, 185, 6)
+    # color = (0, 0, 0)
+    font_style = glut.GLUT_BITMAP_8_BY_13
+    glColor3ub(color[0],color[1],color[2])
+    line=0
+    glRasterPos2f (xpos, ypos)
+    for i in str(skor):
+       if  i=='\n':
+          line=line+1
+          glRasterPos2f (xpos, ypos*line)
+       else:
+          glutBitmapCharacter(font_style, ord(i))
+
+def draw_level():
+    y_level = 0
+    if level == 3:
+        y_level += 60
+    drawText("LEVEL KAMU : ",120,330+y_level)
+    drawTextNum(level,250,330+y_level)
 
 def labirin(pos,r,b,g):
     glPushMatrix()
@@ -61,18 +130,28 @@ def labirin(pos,r,b,g):
     glEnd() #utk mengakhiri objek yang dibuat
     glPopMatrix()
 
-def draw_labirin():
+def draw_labirin(lvl,h_g):
     x,y = 120,50
     r,b,g = 66, 207, 160
-    for row in level[::-1]:
+    for row in lvl[::-1]:
         for col in row:
             if col == "W":
                 labirin((x, y),r,b,g)
-                hold_grid.append([x,y])
-                hold_grid.append([104,130])
+                h_g.append([x,y])
+                h_g.append([104,130])
             elif col == "F":
-                labirin((x, y),255, 255, 255)
+                labirin((x, y),0,0,0)
                 hold_grid.append([x,y])
+                finish.append([x,y])
+            elif col == 'R':
+                if cek_point == True:
+                    labirin((x, y), 0, 0, 0)
+                    hold_grid.append([x,y])
+                    point.append([x,y])
+                else:
+                    labirin((x, y),255, 255, 255)
+                    hold_grid.append([x,y])
+                    point.append([x,y])
             x += 16
         y += 16
         x = 120
@@ -99,42 +178,78 @@ def karakter():
 
 # LOGIK
 def input_keyboard(key,x,y):
-    global x_player1, y_player1
-    # Untuk mengubah posisi grid_indeks0 =[]
-    grid_x = []
-    grid_y = []
-    for i in hold_grid:
-        grid_x.append(i[0])
-        grid_y.append(i[1])
+    global x_player1, y_player1, level, cek_point
         
-    if key == GLUT_KEY_UP: # sama seperti glut_key_up
+    if key == GLUT_KEY_UP:
         try:
             if hold_grid.index([x_player1,y_player1+16]) :
+                if [x_player1,y_player1+16] == point[0] :
+                    cek_point = True
+                    y_player1 += 16
+                if [x_player1,y_player1+16] == finish[0] and cek_point == True:
+                    level +=1
+                    cek_point = False
+                    hold_grid.clear()
+                    finish.clear()
+                    x_player1 = 120
+                    y_player1 = 130
                 y_player1 += 0
         except:
             y_player1 += 16
-        print("Tombol Atas ditekan ", "x : ", x_player1, " y : ", y_player1)
+            
     elif key == GLUT_KEY_DOWN:
         try:
             if hold_grid.index([x_player1,y_player1-16]) :
-                y_player1 += 0
+                if [x_player1,y_player1-16] == point[0] :
+                    cek_point = True
+                    y_player1 -= 16
+                if [x_player1,y_player1-16] == finish[0] and cek_point == True:
+                    level +=1
+                    cek_point = False
+                    point.clear()
+                    hold_grid.clear()
+                    finish.clear()
+                    x_player1 = 120
+                    y_player1 = 130
+                y_player1 -= 0
         except:
             y_player1 -= 16
-        print("Tombol Bawah ditekan ", "x : ", x_player1, " y : ", y_player1)
+            
     elif key == GLUT_KEY_RIGHT:
         try:
             if hold_grid.index([x_player1+16,y_player1]) :
+                if [x_player1+16,y_player1] == point[0] :
+                    cek_point = True
+                    x_player1 += 16
+                if [x_player1+16,y_player1] == finish[0] :
+                    level +=1
+                    cek_point = False
+                    point.clear()
+                    hold_grid.clear()
+                    finish.clear()
+                    x_player1 = 120
+                    y_player1 = 130
                 x_player1 += 0
         except:
             x_player1 += 16
-        print("Tombol Kanan ditekan ", "x : ", x_player1, " y : ", y_player1)
+            
     elif key == GLUT_KEY_LEFT:
         try:
             if hold_grid.index([x_player1-16,y_player1]) :
+                if [x_player1-16,y_player1] == point[0] :
+                    cek_point = True
+                    x_player1 -= 16
+                if [x_player1-16,y_player1] == finish[0] :
+                    level +=1
+                    cek_point = False
+                    point.clear()
+                    hold_grid.clear()
+                    finish.clear()
+                    x_player1 = 120
+                    y_player1 = 130
                 x_player1 += 0
         except:
             x_player1 -= 16
-        print("Tombol Kiri ditekan ", "x : ", x_player1, " y : ", y_player1)
 
 #fungsi iterasi
 def iterate():
@@ -146,40 +261,48 @@ def iterate():
     glLoadIdentity()
     
 def showScreen():
+    global lvl, finis
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) #utk membersihkan layar
     glLoadIdentity()
     iterate()
-    bg_level()
-    draw_labirin()
-    karakter()
+    if level < 4:
+        draw_labirin(lvl[level-1],hold_grid)
+        karakter()
+        draw_level()
+    else:
+        bg_level()
+        finis = True
+        drawText("F I N I S H   ", 200,300)
+        drawText("DENGAN WAKTU (s): ", 200,250)
+        drawTextNum(skor,350,250)
     glutSwapBuffers() #utk membersihkan layar, double buffering
 
 def init():
-    glClearColor(2,1,0, 2.0)
+    # glClearColor(2,1,0, 2.0)
     # glClearColor(1,4,7, 5.0)
-    # glClearColor(0,0,0, 0)
+    glClearColor(0,0,0, 0)
     gluOrtho2D(-500.0, 500.0, -500.0, 500.0)
     
 def timer(value):
-    global y,kecepatan
-    y -= kecepatan
-    if y < value :
-        #y= 10 tingkatan awal
-        #y= 50 tingkatan akhir
-        y = 50
-    glutTimerFunc(kecepatan,timer,0)
+    global cek_skor, waktu, skor
+    if finis == True :
+        skor = cek_skor
+    else:
+        cek_skor += 1
+    glutTimerFunc(waktu,timer,0)
     
 def main ():   
     glutInit() #inisialisasi glut
     glutInitDisplayMode(GLUT_SINGLE|GLUT_RGBA) #utk mengatur display supaya berwarna
     glutInitWindowSize(600, 500) #utk mengatur ukuran window
     glutInitWindowPosition(100,100) #utk mengatur letak window
-    glutCreateWindow("LABIRIN GA TUH GES") #utk memberi nama pada window
+    glutCreateWindow("KOTAK LABIRIN") #utk memberi nama pada window
     glutDisplayFunc(showScreen) #utk fungsi callback
     glutIdleFunc(showScreen) #utk fungsi callback
     glutSpecialFunc(input_keyboard)
-    # timer(0)
+    timer(0)
     init()
     glutMainLoop() #fungsi yang akan memulai keseluruhan program
 
 main()
+print(hold_grid)
