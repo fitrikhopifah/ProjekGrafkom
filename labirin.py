@@ -86,66 +86,73 @@ level3= [
 
 lvl = [level1,level2,level3]
 
+#fungsi untuk menampilkan teks ketika program dijalankan 
 def drawText(ch,xpos,ypos):
-    color = (69, 185, 6)
+    color = (69, 185, 6) #kode warna
     # color = (0, 0, 0)
     font_style = glut.GLUT_BITMAP_8_BY_13
-    glColor3ub(color[0],color[1],color[2])
+    glColor3ub(color[0],color[1],color[2]) #kode warna
     line=0
-    glRasterPos2f (xpos, ypos)
+    glRasterPos2f (xpos, ypos) #posisi teks
     for i in ch:
        if  i=='\n':
           line=line+1
           glRasterPos2f (xpos, ypos*line)
        else:
-          glutBitmapCharacter(font_style, ord(i))  
+          glutBitmapCharacter(font_style, ord(i)) #membuat karakter/teks
 
+#fungsi untuk menampilkan skor ketika program dijalankan 
 def drawTextNum(skor,xpos,ypos):
-    color = (69, 185, 6)
+    color = (69, 185, 6) #kode warna
     # color = (0, 0, 0)
     font_style = glut.GLUT_BITMAP_8_BY_13
     glColor3ub(color[0],color[1],color[2])
     line=0
-    glRasterPos2f (xpos, ypos)
+    glRasterPos2f (xpos, ypos) #posisi teks
     for i in str(skor):
        if  i=='\n':
           line=line+1
           glRasterPos2f (xpos, ypos*line)
        else:
-          glutBitmapCharacter(font_style, ord(i))
+          glutBitmapCharacter(font_style, ord(i)) #membuat karakter/teks
 
+#fungsi utk menghitung level dan waktu dari labirin
 def draw_level():
     y_level = 0
     if level == 3:
-        y_level += 60
+        y_level += 100
     drawText("LEVEL KAMU : ",120,330+y_level)
     drawTextNum(level,250,330+y_level)
+    drawText("WAKTU KAMU (s):   ", 120,300+y_level)
+    drawTextNum(cek_skor,280,300+y_level)
 
+#membentuk labirin dengan menggunakan objek points
 def labirin(pos,r,b,g):
-    glPushMatrix()
+    glPushMatrix() #utk menyimpan koordinat yang ada
     glPointSize(15) #utk mengatur ukuran titiknya
     glBegin(GL_POINTS) #utk memulai pembuatan objek titik
     glColor3ub(r,b,g) #kode warna pake rgb
     glVertex2f(pos[0],pos[1]) #titik koordinat
     glEnd() #utk mengakhiri objek yang dibuat
-    glPopMatrix()
+    glPopMatrix() #utk memanggil suatu fungsi yang telah disimpan glPushMatrix()
 
+#embuat labirin menggunkan perulangan for
 def draw_labirin(lvl,h_g):
     x,y = 120,50
     r,b,g = 66, 207, 160
-    for row in lvl[::-1]:
-        for col in row:
-            if col == "W":
+    for row in lvl[::-1]: #utk membuat row atau baris 
+        for col in row: #utk membuat kolom dimana nanti col akan diseleksi
+            if col == "W": #maka membentuk dinding labirin
                 labirin((x, y),r,b,g)
                 h_g.append([x,y])
                 h_g.append([104,130])
-            elif col == "F":
+            elif col == "F": #maka membuat jalur finis
                 labirin((x, y),0,0,0)
                 hold_grid.append([x,y])
                 finish.append([x,y])
-            elif col == 'R':
+            elif col == 'R': #maka membuat kotak yng akan dicari
                 if cek_point == True:
-                    labirin((x, y), 0, 0, 0)
+                    #labirin((x, y), 0, 0, 0)
                     hold_grid.append([x,y])
                     point.append([x,y])
                 else:
@@ -156,30 +163,33 @@ def draw_labirin(lvl,h_g):
         y += 16
         x = 120
 
+#untuk membuat background ketika game over yang berguna sebagai wadah dari teks yang akan ditampilkan
 def bg_level():
-    glPushMatrix()
+    glPushMatrix() #utk menyimpan koordinat yang ada
     glBegin(GL_QUADS) #utk memulai pembuatan objek titik
     glColor3ub(0,0,0) #kode warna pake rgb
     glVertex2f(111,43) #titik koordinat
-    glVertex2f(610,43)
-    glVertex2f(610,282)
-    glVertex2f(111,282)
+    glVertex2f(610,43) #titik koordinat
+    glVertex2f(610,282) #titik koordinat
+    glVertex2f(111,282) #titik koordinat
     glEnd() #utk mengakhiri objek yang dibuat
-    glPopMatrix()
+    glPopMatrix() #utk memanggil suatu fungsi yang telah disimpan glPushMatrix()
 
-def karakter():
-    glPushMatrix()
-    glPointSize(10)
-    glBegin(GL_POINTS)
-    glColor3ub(255, 136, 0)
-    glVertex2f(x_player1,y_player1)
-    glEnd()
-    glPopMatrix()
+#untuk membuat karakter yang berupa objek point 
+def karakter(): 
+    glPushMatrix() #utk menyimpan koordinat yang ada
+    glPointSize(10) #utk mengatur ukuran titiknya
+    glBegin(GL_POINTS) #utk memulai pembuatan objek titik
+    glColor3ub(255, 136, 0) #kode warna pake rgb
+    glVertex2f(x_player1,y_player1) #titik koordinat
+    glEnd()  #utk mengakhiri objek yang dibuat
+    glPopMatrix() #utk memanggil suatu fungsi yang telah disimpan glPushMatrix()
 
 # LOGIK
 def input_keyboard(key,x,y):
     global x_player1, y_player1, level, cek_point
-        
+
+    #Fungsi untuk mengubah posisi kotak    
     if key == GLUT_KEY_UP:
         try:
             if hold_grid.index([x_player1,y_player1+16]) :
@@ -191,7 +201,7 @@ def input_keyboard(key,x,y):
                     cek_point = False
                     hold_grid.clear()
                     finish.clear()
-                    x_player1 = 120
+                    x_player1 = 120 #posisi utk player 120 dan 130
                     y_player1 = 130
                 y_player1 += 0
         except:
@@ -209,7 +219,7 @@ def input_keyboard(key,x,y):
                     point.clear()
                     hold_grid.clear()
                     finish.clear()
-                    x_player1 = 120
+                    x_player1 = 120 #posisi utk player 120 dan 130
                     y_player1 = 130
                 y_player1 -= 0
         except:
@@ -227,7 +237,7 @@ def input_keyboard(key,x,y):
                     point.clear()
                     hold_grid.clear()
                     finish.clear()
-                    x_player1 = 120
+                    x_player1 = 120 #posisi utk player 120 dan 130
                     y_player1 = 130
                 x_player1 += 0
         except:
@@ -245,7 +255,7 @@ def input_keyboard(key,x,y):
                     point.clear()
                     hold_grid.clear()
                     finish.clear()
-                    x_player1 = 120
+                    x_player1 = 120 #posisi utk player 120 dan 130
                     y_player1 = 130
                 x_player1 += 0
         except:
@@ -264,7 +274,7 @@ def showScreen():
     global lvl, finis
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) #utk membersihkan layar
     glLoadIdentity()
-    iterate()
+    iterate() #fungsi looping
     if level < 4:
         draw_labirin(lvl[level-1],hold_grid)
         karakter()
@@ -274,21 +284,24 @@ def showScreen():
         finis = True
         drawText("F I N I S H   ", 200,300)
         drawText("DENGAN WAKTU (s): ", 200,250)
-        drawTextNum(skor,350,250)
+        drawTextNum(skor,350,250) #skor akhir yang akan dicetak ketika game berakhir
     glutSwapBuffers() #utk membersihkan layar, double buffering
 
 def init():
     # glClearColor(2,1,0, 2.0)
     # glClearColor(1,4,7, 5.0)
-    glClearColor(0,0,0, 0)
+    glClearColor(0,0,0, 0) # utk memilih warna yang digunakan untuk membersihkan latar dalam mode RGBA
     gluOrtho2D(-500.0, 500.0, -500.0, 500.0)
     
+# fungsi utk menghitung skor
 def timer(value):
+    # cek skor : skor sementara untuk penghitungan skor player ketika menelusuri labirin
+    # skor : skor akhir yang akan dicetak ketika game berakhir
     global cek_skor, waktu, skor
     if finis == True :
         skor = cek_skor
     else:
-        cek_skor += 1
+        cek_skor += 1 
     glutTimerFunc(waktu,timer,0)
     
 def main ():   
@@ -299,10 +312,10 @@ def main ():
     glutCreateWindow("KOTAK LABIRIN") #utk memberi nama pada window
     glutDisplayFunc(showScreen) #utk fungsi callback
     glutIdleFunc(showScreen) #utk fungsi callback
-    glutSpecialFunc(input_keyboard)
+    glutSpecialFunc(input_keyboard) # utk mengaktifkan tombol-tombol khusus pada keyboard 
     timer(0)
     init()
     glutMainLoop() #fungsi yang akan memulai keseluruhan program
 
 main()
-print(hold_grid)
+print(hold_grid) # utk membuat dinding labirin yang dimana diinisialisasikan sebagai W 
